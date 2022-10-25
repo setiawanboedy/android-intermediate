@@ -1,0 +1,55 @@
+<resources>
+    <string name="app_name">Cerita Kita</string>
+    <string name="email">Email</string>
+    <string name="email_address">Alamat Email</string>
+    <string name="invalid_email">Email Salah</string>
+    <string name="password">Kata Sandi</string>
+    <string name="password_char">Kata sandi 6 karakter</string>
+    <string name="login">Masuk</string>
+    <string name="password_length">Kata sandi  lebih dari 6 karakter</string>
+    <string name="don_t_have_an_account">Tidak punya akun?</string>
+    <string name="register">Daftar</string>
+    <string name="full_name">Nama Lengkap</string>
+    <string name="have_an_account">Sudah punya akun?</string>
+    <string name="title_home">Beranda</string>
+    <string name="title_add">Tambah</string>
+    <string name="title_setting">Pengaturan</string>
+    <string name="logout">Keluar</string>
+    <string name="location">Lokasi</string>
+    <string name="description">Deskripsi</string>
+    <string name="name">Nama</string>
+    <string name="created_at">Dibuat</string>
+
+    <!--    time-->
+    <string name="date_second">detik yang lalu</string>
+    <string name="date_minute">menit yang lalu</string>
+    <string name="date_hour">jam yang lalu</string>
+    <string name="date_day">hari yang lalu</string>
+    <string name="date_week">minggu yang lalu</string>
+    <string name="date_month">bulan yang lalu</string>
+    <string name="date_year">tahun yang lalu</string>
+    <string name="yes">Ya</string>
+    <string name="no">Tidak</string>
+    <string name="title_logout">Keluar</string>
+    <string name="sub_logout">Apakah anda ingin keluar?</string>
+    <string name="add_story">Tambah cerita</string>
+    <string name="camera">Kamera</string>
+    <string name="gallery">Galeri</string>
+    <string name="choose">Pilih gambar</string>
+    <string name="detail_story">Detail Cerita</string>
+    <string name="add_image">Mohon menambahkan gambar</string>
+    <string name="granted">Di izinkan</string>
+    <string name="choose_image">Pilih gambar</string>
+    <string name="authority">com.example.ourstory</string>
+    <string name="unknown_error">Terjadi kesalahan</string>
+    <string name="register_success">Daftar berhasil</string>
+    <string name="login_success">Masuk berhasil</string>
+    <string name="unknown">Tidak diketahui</string>
+    <string name="empty">Kosong</string>
+    <string name="language_setting">Pengaturan Bahasa</string>
+    <string name="english">Inggris</string>
+    <string name="confirm_password">Konfirmasi Password</string>
+    <string name="pw_not_match">Password tidak sesuai</string>
+    <string name="image_too_large">Ukuran gambar terlalu besar, maksimal 1MB</string>
+    <string name="add_success">Tambah cerita berhasil</string>
+</resources>

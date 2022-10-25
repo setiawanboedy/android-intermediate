@@ -1,0 +1,56 @@
+<resources>
+    <string name="app_name">Our Story</string>
+
+    <string name="email">Email</string>
+    <string name="email_address">Email Address</string>
+    <string name="invalid_email">Invalid Email</string>
+    <string name="password">Password</string>
+    <string name="password_char">Password 6 Characters</string>
+    <string name="login">Login</string>
+    <string name="password_length">Password must be more than 6 characters</string>
+    <string name="don_t_have_an_account">Don\'t have an account?</string>
+    <string name="register">Register</string>
+    <string name="full_name">Full Name</string>
+    <string name="have_an_account">Have an account?</string>
+    <string name="title_home">Home</string>
+    <string name="title_add">Add</string>
+    <string name="title_setting">Setting</string>
+    <string name="logout">Logout</string>
+    <string name="location">Location</string>
+    <string name="description">Description</string>
+    <string name="name">Name</string>
+    <string name="created_at">Created At</string>
+
+    <!--    time-->
+    <string name="date_second">seconds ago</string>
+    <string name="date_minute">minutes ago</string>
+    <string name="date_hour">hours ago</string>
+    <string name="date_day">days ago</string>
+    <string name="date_week">weeks ago</string>
+    <string name="date_month">months ago</string>
+    <string name="date_year">year ago</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="title_logout">Logout</string>
+    <string name="sub_logout">Do you wan to logout?</string>
+    <string name="add_story">Add Story</string>
+    <string name="camera">camera</string>
+    <string name="gallery">Gallery</string>
+    <string name="choose">Choose to pick an image</string>
+    <string name="detail_story">Detail Story</string>
+    <string name="add_image">Please add image</string>
+    <string name="granted">Granted</string>
+    <string name="choose_image">Choose a picture</string>
+    <string name="authority">com.example.ourstory</string>
+    <string name="unknown_error">Unknown Error</string>
+    <string name="register_success">Register Success</string>
+    <string name="login_success">Login Success</string>
+    <string name="unknown">Unknown</string>
+    <string name="empty">Empty</string>
+    <string name="language_setting">Language Setting</string>
+    <string name="english">English</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="pw_not_match">Password doesn\'t match</string>
+    <string name="image_too_large">Image too large, max size 1MB</string>
+    <string name="add_success">Add story success</string>
+</resources>
