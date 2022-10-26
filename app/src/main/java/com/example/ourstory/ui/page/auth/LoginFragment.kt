@@ -12,7 +12,7 @@ import com.example.ourstory.MainActivity
 import com.example.ourstory.R
 import com.example.ourstory.core.Status
 import com.example.ourstory.databinding.FragmentLoginBinding
-import com.example.ourstory.request.LoginRequest
+import com.example.ourstory.domain.request.LoginRequest
 import com.example.ourstory.session.SessionManager
 import com.example.ourstory.utils.snackBar
 import com.example.ourstory.utils.textTrim

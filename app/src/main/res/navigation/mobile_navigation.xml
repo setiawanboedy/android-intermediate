@@ -17,6 +17,11 @@
         android:label="@string/title_add"
         tools:layout="@layout/fragment_add" />
     <fragment
+        android:id="@+id/navigation_map"
+        android:name="com.example.ourstory.ui.page.map.MapFragment"
+        android:label="@string/title_map"
+        tools:layout="@layout/fragment_map" />
+    <fragment
         android:id="@+id/navigation_setting"
         android:name="com.example.ourstory.ui.page.setting.SettingFragment"
         android:label="@string/title_setting"

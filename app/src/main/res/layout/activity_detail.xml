@@ -66,12 +66,14 @@
 
             <TextView
                 android:id="@+id/tv_location"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp_16"
+                android:layout_marginEnd="16dp"
                 android:alpha="0"
                 android:text="@string/location"
                 app:layout_constraintBottom_toBottomOf="@+id/iv_location"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/iv_location"
                 app:layout_constraintTop_toTopOf="@+id/iv_location" />
 
@@ -102,14 +104,17 @@
 
             <TextView
                 android:id="@+id/tv_desc"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp_16"
                 android:layout_marginTop="@dimen/dp_16"
-                android:layout_marginEnd="@dimen/dp_16"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
                 android:alpha="0"
                 android:text="@string/description"
                 android:textSize="@dimen/sp_14"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_location" />
         </androidx.constraintlayout.widget.ConstraintLayout>

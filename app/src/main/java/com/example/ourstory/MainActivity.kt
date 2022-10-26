@@ -1,7 +1,7 @@
 package com.example.ourstory
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -24,7 +24,10 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_main)
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.navigation_home, R.id.navigation_add, R.id.navigation_setting
+                R.id.navigation_home,
+                R.id.navigation_add,
+                R.id.navigation_map,
+                R.id.navigation_setting
             )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)

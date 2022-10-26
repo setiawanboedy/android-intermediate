@@ -26,7 +26,7 @@ import com.example.ourstory.MainActivity
 import com.example.ourstory.R
 import com.example.ourstory.core.Status
 import com.example.ourstory.databinding.FragmentAddBinding
-import com.example.ourstory.request.AddRequest
+import com.example.ourstory.domain.request.AddRequest
 import com.example.ourstory.utils.Constants.REQUIRED_PERMISSIONS
 import com.example.ourstory.utils.createCustomTempFile
 import com.example.ourstory.utils.snackBar

@@ -1,6 +1,6 @@
 package com.example.ourstory.core
 
-import com.example.ourstory.response.GenericResponse
+import com.example.ourstory.domain.response.GenericResponse
 import okhttp3.ResponseBody
 import retrofit2.Converter
 import retrofit2.Retrofit

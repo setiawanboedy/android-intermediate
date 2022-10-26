@@ -52,4 +52,8 @@
     <string name="pw_not_match">Password tidak sesuai</string>
     <string name="image_too_large">Ukuran gambar terlalu besar, maksimal 1MB</string>
     <string name="add_success">Tambah cerita berhasil</string>
+    <string name="story_not_found">Cerita tidak ditemukan</string>
+    <string name="reload">Muat ulang</string>
+    <string name="title_map">Peta</string>
+    <string name="not_found_story_location">Tidak ditemukan cerita dengan lokasi</string>
 </resources>

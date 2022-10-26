@@ -5,20 +5,21 @@ import com.example.ourstory.BuildConfig.BASE_URL
 import com.example.ourstory.BuildConfig.DEBUG
 import com.example.ourstory.core.ErrorParser
 import com.example.ourstory.core.SafeResponse
-import com.example.ourstory.datasource.DataSources
-import com.example.ourstory.network.get.GetService
-import com.example.ourstory.network.interceptor.InterceptorApi
-import com.example.ourstory.network.post.AuthService
-import com.example.ourstory.network.post.PostService
-import com.example.ourstory.repository.Repository
-import com.example.ourstory.repository.RepositoryImpl
+import com.example.ourstory.data.datasource.DataSources
+import com.example.ourstory.data.local.db.StoryDatabase
+import com.example.ourstory.data.network.get.GetService
+import com.example.ourstory.data.network.interceptor.InterceptorApi
+import com.example.ourstory.data.network.post.AuthService
+import com.example.ourstory.data.network.post.PostService
+import com.example.ourstory.data.repository.RepositoryImpl
+import com.example.ourstory.domain.repository.Repository
+import com.example.ourstory.domain.usecase.AddCase
+import com.example.ourstory.domain.usecase.LoginCase
+import com.example.ourstory.domain.usecase.RegisterCase
+import com.example.ourstory.domain.usecase.StoriesCase
 import com.example.ourstory.session.Preferences
 import com.example.ourstory.session.SessionManager
 import com.example.ourstory.ui.view.PopDialog
-import com.example.ourstory.usecase.AddCase
-import com.example.ourstory.usecase.LoginCase
-import com.example.ourstory.usecase.RegisterCase
-import com.example.ourstory.usecase.StoriesCase
 import com.example.ourstory.utils.Constants
 import dagger.Module
 import dagger.Provides
@@ -96,6 +97,19 @@ object Injection {
 
     @Provides
     @Singleton
+    fun provideDatabase(@ApplicationContext context: Context) =
+        StoryDatabase.getDatabase(context)
+
+    @Provides
+    @Singleton
+    fun provideStoryDao(db: StoryDatabase) = db.storyDao()
+
+    @Provides
+    @Singleton
+    fun provideRemoteDao(db: StoryDatabase) = db.remoteKeyDao()
+
+    @Provides
+    @Singleton
     fun provideErrorParser(retrofit: Retrofit) = ErrorParser(retrofit)
 
     @Provides
@@ -110,8 +124,12 @@ object Injection {
 
     @Provides
     @Singleton
-    fun provideRepository(data: DataSources): Repository =
-        RepositoryImpl.getInstance(data)
+    fun provideRepository(
+        data: DataSources,
+        db: StoryDatabase,
+        getService: GetService
+    ): Repository =
+        RepositoryImpl.getInstance(data, db, getService)
 
     @Provides
     @Singleton

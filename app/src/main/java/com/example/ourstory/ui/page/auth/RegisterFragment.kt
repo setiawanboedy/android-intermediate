@@ -10,7 +10,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.ourstory.R
 import com.example.ourstory.core.Status
 import com.example.ourstory.databinding.FragmentRegisterBinding
-import com.example.ourstory.request.RegisterRequest
+import com.example.ourstory.domain.request.RegisterRequest
 import com.example.ourstory.session.Preferences
 import com.example.ourstory.utils.snackBar
 import com.example.ourstory.utils.textTrim

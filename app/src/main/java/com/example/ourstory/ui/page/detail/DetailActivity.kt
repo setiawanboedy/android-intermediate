@@ -11,10 +11,12 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.ourstory.MainActivity
 import com.example.ourstory.R
 import com.example.ourstory.databinding.ActivityDetailBinding
-import com.example.ourstory.model.StoryModel
+import com.example.ourstory.domain.model.StoryModel
 import com.example.ourstory.utils.Constants.STORY
 import com.example.ourstory.utils.convertDate
+import com.example.ourstory.utils.getAddressName
 import com.example.ourstory.utils.setImage
+import com.google.android.gms.maps.model.LatLng
 
 
 class DetailActivity : AppCompatActivity() {
@@ -46,6 +48,15 @@ class DetailActivity : AppCompatActivity() {
             tvCreated.convertDate(story.createdAt, applicationContext)
             tvName.text = story.name
             tvLocation.text = story.lon?.toString() ?: getString(R.string.unknown)
+            if (story.lat != null && story.lon != null)
+                tvLocation.text = getAddressName(
+                    applicationContext, LatLng(
+                        story.lat!!,
+                        story.lon!!
+                    )
+                )
+            else
+                tvLocation.text = applicationContext.getString(R.string.unknown)
             tvDesc.text = story.description
         }
 

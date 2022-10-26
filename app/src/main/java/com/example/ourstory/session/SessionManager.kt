@@ -1,7 +1,7 @@
 package com.example.ourstory.session
 
 import android.content.SharedPreferences
-import com.example.ourstory.model.UserModel
+import com.example.ourstory.domain.model.UserModel
 
 class SessionManager(private val prefs: SharedPreferences) {
     companion object {

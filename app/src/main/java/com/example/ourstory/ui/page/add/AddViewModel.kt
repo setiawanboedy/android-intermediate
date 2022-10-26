@@ -3,9 +3,9 @@ package com.example.ourstory.ui.page.add
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.example.ourstory.core.Sealed
-import com.example.ourstory.request.AddRequest
-import com.example.ourstory.response.GenericResponse
-import com.example.ourstory.usecase.AddCase
+import com.example.ourstory.domain.request.AddRequest
+import com.example.ourstory.domain.response.GenericResponse
+import com.example.ourstory.domain.usecase.AddCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

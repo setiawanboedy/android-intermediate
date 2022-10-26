@@ -9,9 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.ourstory.R
-import com.example.ourstory.core.Status
 import com.example.ourstory.databinding.FragmentHomeBinding
-import com.example.ourstory.params.StoryParams
+import com.example.ourstory.domain.params.StoryParams
 import com.example.ourstory.session.SessionManager
 import com.example.ourstory.ui.page.auth.AuthActivity
 import com.example.ourstory.ui.page.detail.DetailActivity
@@ -25,7 +24,7 @@ class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-    private lateinit var storyAdapter: StoryAdapter
+    private lateinit var storyAdapter: StoryPageAdapter
     private val viewModel: HomeViewModel by viewModels()
 
     @Inject
@@ -45,7 +44,6 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         binding.myToolbar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.action_exit -> {
@@ -54,13 +52,16 @@ class HomeFragment : Fragment() {
                 }
                 else -> false
             }
-
         }
 
-        storyAdapter = StoryAdapter(requireContext())
+        storyAdapter = StoryPageAdapter(requireContext())
         binding.rvStories.apply {
-            adapter = storyAdapter
+            adapter = storyAdapter.withLoadStateHeaderAndFooter(
+                footer = StoryStateAdapter { storyAdapter.retry() },
+                header = StoryStateAdapter { storyAdapter.retry() }
+            )
             layoutManager = LinearLayoutManager(requireContext())
+
         }
         getStories()
 
@@ -72,24 +73,9 @@ class HomeFragment : Fragment() {
     }
 
     private fun getStories() {
-        val params = StoryParams(page = 1, size = 5)
+        val params = StoryParams(page = 5, size = 20)
         viewModel.getStories(params).observe(viewLifecycleOwner) { res ->
-            when (res.status) {
-                Status.LOADING -> {
-                    binding.shimmerViewContainer.startShimmerAnimation()
-                }
-                Status.ERROR -> {
-                    binding.shimmerViewContainer.visibility = View.GONE
-                    binding.shimmerViewContainer.stopShimmerAnimation()
-                }
-                Status.SUCCESS -> {
-                    binding.shimmerViewContainer.visibility = View.GONE
-                    binding.shimmerViewContainer.stopShimmerAnimation()
-                    storyAdapter.submitList(res.data?.listStory)
-                    if (listOf(res.data?.listStory).isEmpty())
-                        binding.tvEmpty.visibility = View.VISIBLE
-                }
-            }
+            storyAdapter.submitData(lifecycle, res)
         }
     }
 
@@ -107,10 +93,6 @@ class HomeFragment : Fragment() {
         )
     }
 
-    override fun onPause() {
-        binding.shimmerViewContainer.stopShimmerAnimation()
-        super.onPause()
-    }
 
     override fun onDestroy() {
         super.onDestroy()

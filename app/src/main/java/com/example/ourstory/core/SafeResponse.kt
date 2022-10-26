@@ -1,6 +1,6 @@
 package com.example.ourstory.core
 
-import com.example.ourstory.response.GenericResponse
+import com.example.ourstory.domain.response.GenericResponse
 import com.example.ourstory.utils.Constants.TIMEOUT_ERROR
 import com.example.ourstory.utils.Constants.UNKNOWN_ERROR
 import okhttp3.ResponseBody
