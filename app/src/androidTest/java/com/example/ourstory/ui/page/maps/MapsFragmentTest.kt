@@ -13,6 +13,7 @@ import com.example.ourstory.utils.launchFragmentInHiltContainer
 import dagger.hilt.android.testing.HiltAndroidTest
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
+import org.hamcrest.CoreMatchers
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -44,5 +45,29 @@ class MapsFragmentTest {
         mockWebServer.enqueue(mockResponse)
 
         onView(withId(R.id.maps)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun launchMapFragment_Failed() {
+        launchFragmentInHiltContainer<MapFragment>()
+
+        val mockResponse = MockResponse()
+            .setResponseCode(200)
+            .setBody(JsonConverter.readStringFromFile("mock_story_empty.json"))
+        mockWebServer.enqueue(mockResponse)
+
+        onView(withId(R.id.tv_map_failed)).check(matches(CoreMatchers.not(isDisplayed())))
+    }
+
+    @Test
+    fun launchMapFragment_Empty() {
+        launchFragmentInHiltContainer<MapFragment>()
+
+        val mockResponse = MockResponse()
+            .setResponseCode(200)
+            .setBody(JsonConverter.readStringFromFile("mock_story_empty.json"))
+        mockWebServer.enqueue(mockResponse)
+
+        onView(withId(R.id.tv_map_failed)).check(matches(CoreMatchers.not(isDisplayed())))
     }
 }

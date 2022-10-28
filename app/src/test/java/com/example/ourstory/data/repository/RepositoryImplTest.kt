@@ -36,7 +36,7 @@ import org.mockito.junit.MockitoJUnitRunner
 
 @ExperimentalCoroutinesApi
 @RunWith(MockitoJUnitRunner::class)
-class RepositoryTest {
+class RepositoryImplTest {
     @get:Rule
     val instantExecutorRule = InstantTaskExecutorRule()
 
@@ -149,7 +149,7 @@ class RepositoryTest {
     }
 
     @Test
-    fun `Upload story success`() = runBlocking {
+    fun `Upload Story Success`() = runBlocking {
         val service = ServiceDummy()
         val expectation = uploadResponseDummy
         val actual = service.addStory(descDummy, multipartDummy, null, null).body()
@@ -169,7 +169,7 @@ class RepositoryTest {
     }
 
     @Test
-    fun `Get Stories page success`() = runBlocking {
+    fun `Get Stories with page success`() = runBlocking {
         val dataDummy = DataDummy.listStoriesDummy()
         val data = PageDataSourceTest.snapshot(dataDummy)
 

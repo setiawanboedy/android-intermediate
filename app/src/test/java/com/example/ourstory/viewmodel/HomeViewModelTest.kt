@@ -40,7 +40,7 @@ class HomeViewModelTest {
 
 
     @Test
-    fun `Get stories success`() = runTest {
+    fun `Get Stories with Paging Success`() = runTest {
         val dataDummy = DataDummy.listStoriesDummy()
         val data = PageDataSourceTest.snapshot(dataDummy)
 

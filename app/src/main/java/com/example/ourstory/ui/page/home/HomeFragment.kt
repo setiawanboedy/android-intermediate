@@ -15,6 +15,8 @@ import com.example.ourstory.session.SessionManager
 import com.example.ourstory.ui.page.auth.AuthActivity
 import com.example.ourstory.ui.page.detail.DetailActivity
 import com.example.ourstory.ui.view.PopDialog
+import com.example.ourstory.utils.Constants.PAGE
+import com.example.ourstory.utils.Constants.SIZE_DATA
 import com.example.ourstory.utils.Constants.STORY
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -73,7 +75,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun getStories() {
-        val params = StoryParams(page = 5, size = 20)
+        val params = StoryParams(page = PAGE, size = SIZE_DATA)
         viewModel.getStories(params).observe(viewLifecycleOwner) { res ->
             storyAdapter.submitData(lifecycle, res)
         }

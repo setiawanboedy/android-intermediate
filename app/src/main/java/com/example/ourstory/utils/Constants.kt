@@ -13,6 +13,11 @@ object Constants {
     const val SPLASH_DURATION: Long = 300
     const val INIT_PAGE_INDEX = 1
 
+    const val PAGE = 5
+    const val SIZE_DATA = 20
+
+    const val FILE_SIZE_MB = 1024
+
     var BASE_URL_MOCK: String? = null
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)

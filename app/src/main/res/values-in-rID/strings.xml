@@ -56,4 +56,5 @@
     <string name="title_map">Peta</string>
     <string name="not_found_story_location">Tidak ditemukan cerita dengan lokasi</string>
     <string name="add_location">Tambah lokasi</string>
+    <string name="map_failed">Map gagal</string>
 </resources>

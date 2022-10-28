@@ -1,60 +1,63 @@
-**Unit Testing**
-DicodingRepository
-- Login success
-	Memanggil service
-	Membuat expectedResult
-	Membuat actualResult dengan memanggil service
-	Memastikan actualResult tidak null
-	Memastikan expectesResult sama dengan actualResult
-- Login error
+====== Unit Testing =======
+RepositoryImpTest
+- User Register Success
 	Memanggil service
 	Membuat expectedResult
 	Membuat actualResult dengan memanggil service
 	Memastikan actualResult tidak null
 	Memastikan expectesResult sama dengan actualResult
 
-- Register success
-	Memanggil service
-	Membuat expectedResult
-	Membuat actualResult dengan memanggil service
-	Memastikan actualResult tidak null
-	Memastikan expectesResult sama dengan actualResult
-- Register error
+- User Register Error
 	Memanggil service
 	Membuat expectedResult
 	Membuat actualResult dengan memanggil service
 	Memastikan actualResult tidak null
 	Memastikan expectesResult sama dengan actualResult
 
-- Story with location success
+- User Login Success
+	Memanggil service
+	Membuat expectedResult
+	Membuat actualResult dengan memanggil service
+	Memastikan actualResult tidak null
+	Memastikan expectesResult sama dengan actualResult
+
+- User Login Error
+	Memanggil service
+	Membuat expectedResult
+	Membuat actualResult dengan memanggil service
+	Memastikan actualResult tidak null
+	Memastikan expectesResult sama dengan actualResult
+
+- Get stories with location success
 	Membuat expectedResult
 	Memanggil data dari repository
 	Mengecek data tidak error
 	Memastikan data dari repository tidak null
 	memastikan actualResult (data) dan expectedResult sama
--Story with location error
+
+- Get stories with location error
 	Membuat expectedResult
 	Memanggil data dari repository
 	Mengecek data error
 	Memastikan data dari repository tidak null
 	memastikan actualResult (data) dan expectedResult sama
 
--New story success
+- Upload Story Success
 	Memanggil service
 	Membuat expectedResult
 	Mengirim request ke service
 	Mendapatkan actualResult dari request
 	Memastikan data actualResult tidak null
 	Memastikan expectedResult dan actualResult bernilai sama
--New story error
+
+- Upload story error
 	Memanggil service
 	Membuat expectedResult
 	membuat actualResult error
 	Memastikan data actualResult tidak null
 	Memastikan expectedResult dan actualResult bernilai sama
 
-PostMeditorRepository
--Story with paging success
+- Get Stories with page success
 	Memanggil data
 	Membuat expectedResult
 	Membuat actualResult
@@ -64,54 +67,38 @@ PostMeditorRepository
 
 
 AuthViewModel
--Login success
+- User Login Success
 	Membuat expectedResult
 	Mendapatkan actualResult dari request ke viewmodel
 	Memastikan actualResult tidak null
 	Memastikan expectedResult dan actualResult sama
--Login error
-	Membuat expectedResult
-	Mendapatkan actualResult dari request ke viewmodel
-	Memastikan actualResult tidak null
-	Memastikan expectedResult dan actualResult sama
-
--Register success
-	Membuat expectedResult
-	Mendapatkan actualResult dari request ke viewmodel
-	Memastikan actualResult tidak null
-	Memastikan expectedResult dan actualResult sama
--Regsiter error
+- User Login Error
 	Membuat expectedResult
 	Mendapatkan actualResult dari request ke viewmodel
 	Memastikan actualResult tidak null
 	Memastikan expectedResult dan actualResult sama
 
-PostViewModel
--Story with paging
-	Mendapatkan expectedResult dari data dummy
-	Membuat actualResult 
-	Memastikan actualRsult Tidak null
-	Memastikan ukuran actualResult dan differ sama
+- User Register Success
+	Membuat expectedResult
+	Mendapatkan actualResult dari request ke viewmodel
+	Memastikan actualResult tidak null
+	Memastikan expectedResult dan actualResult sama
+- User Register Error
+	Membuat expectedResult
+	Mendapatkan actualResult dari request ke viewmodel
+	Memastikan actualResult tidak null
+	Memastikan expectedResult dan actualResult sama
 
--Story with location success
-	Membuat expectedResult dari data dummy
-	Mendapatkan actualResult dari memanggil viewmodel
-	Memastikan data actualResult tidak null
-	Memastikan expectedResult dan actualResult bernilai sama
--Story with location error
-	Membuat expectedResult dari data dummy
-	Mendapatkan actualResult dari memanggil viewmodel
-	Memastikan data actualResult tidak null
-	Memastikan status actualResult error
-
--New story success
+AddViewModel
+- Add Story Success
 	Mendapatkan expectedResult dari data dummy
 	Membuat request
 	Mengirim request ke viewmodel
 	Membuat actualResult dari request viewmodel
 	Memastikan actualResult tidak null
 	Memastikan expectedResult dan actualResult sama
--New story error
+
+- Add Story Error
 	Mendapatkan expectedResult dari data dummy
 	Membuat request
 	Mengirim request ke viewmodel
@@ -119,22 +106,42 @@ PostViewModel
 	Memastikan actualResult tidak null
 	Memastikan actualResult error
 
+HomeViewModel
+- Get Stories with Paging Success
+	Mendapatkan expectedResult dari data dummy
+	Membuat actualResult 
+	Memastikan actualRsult Tidak null
+	Memastikan ukuran actualResult dan differ sama
 
-**Instrumental Testing**
+- Get Stories with Location Success
+	Membuat expectedResult dari data dummy
+	Mendapatkan actualResult dari memanggil viewmodel
+	Memastikan data actualResult tidak null
+	Memastikan expectedResult dan actualResult bernilai sama
+
+- Get Stories with Location Error
+	Membuat expectedResult dari data dummy
+	Mendapatkan actualResult dari memanggil viewmodel
+	Memastikan data actualResult tidak null
+	Memastikan status actualResult error
+
+
+====== Instrumental Testing ====== 
 @MediumTest
 HomeFragment
--Success
+- Success
 	Membuka halaman HomeFragment
 	Membuat response dengan mockWebServer
 	Memastikan recyclerView tampil
--Empty
+- Failed
 	Membuka halaman HomeFragment
 	Membuat response dengan mockWebServer
-	Menampilkan error
--Error
+	Menampilkan Empty
+- Empty
 	Membuka halaman HomeFragment
 	Membuat response dengan mockWebServer
-	Menampilkan error
+	Menampilkan Empty
+
 
 @MediumTest
 MapsFragment
@@ -142,6 +149,14 @@ MapsFragment
 	Membuka halaman MapsFragment
 	Membuat response dengan mockWebServer
 	Menampilkan maps
+- Failed
+	Membuka halaman MapsFragment
+	Membuat response dengan mockWebServer
+	Menampilkan Map failed
+- Empty
+	Membuka halaman MapsFragment
+	Membuat response dengan mockWebServer
+	Menampilkan Map failed
 
 @LargeTest
 MainActivity
@@ -152,6 +167,5 @@ MainActivity
 	Melakukan navigasi back
 	Membuka halaman maps
 	Membuka halaman upload story
-	Melakukan navigasi back
-	Membukan halaman home
+	Membukan halaman setting
 	Selesai

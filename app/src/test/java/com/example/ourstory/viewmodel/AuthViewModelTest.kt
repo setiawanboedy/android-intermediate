@@ -40,7 +40,7 @@ class AuthViewModelTest {
     private val registerRequest = RegisterRequest("sinaga", "sinaga@gmail.com", "sinagarendi")
 
     @Test
-    fun `User login success`() = runTest {
+    fun `User Login Success`() = runTest {
         val expectation = loginResponse
         val login = MutableLiveData<Sealed<LoginResponse>>()
         login.value = Sealed.success(expectation)
@@ -56,7 +56,7 @@ class AuthViewModelTest {
     }
 
     @Test
-    fun `User login error`() = runTest {
+    fun `User Login Error`() = runTest {
         val login = MutableLiveData<Sealed<LoginResponse>>()
         login.value = Sealed.error("UNKNOWN ERROR", null)
 
@@ -71,7 +71,7 @@ class AuthViewModelTest {
     }
 
     @Test
-    fun `User register success`() = runTest {
+    fun `User Register Success`() = runTest {
         val expectation = DataDummy.registerResponseDummy()
         val register = MutableLiveData<Sealed<RegisterResponse>>()
         register.value = Sealed.success(expectation)
@@ -87,7 +87,7 @@ class AuthViewModelTest {
     }
 
     @Test
-    fun `User register error`() = runTest {
+    fun `User Register Error`() = runTest {
 
         val register = MutableLiveData<Sealed<RegisterResponse>>()
         register.value = Sealed.error("UNKNOWN ERROR", null)

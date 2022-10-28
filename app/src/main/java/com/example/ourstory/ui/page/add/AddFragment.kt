@@ -28,6 +28,7 @@ import com.example.ourstory.R
 import com.example.ourstory.core.Status
 import com.example.ourstory.databinding.FragmentAddBinding
 import com.example.ourstory.domain.request.AddRequest
+import com.example.ourstory.utils.Constants.FILE_SIZE_MB
 import com.example.ourstory.utils.Constants.LOCATION_PERMISSION
 import com.example.ourstory.utils.Constants.REQUIRED_PERMISSIONS
 import com.example.ourstory.utils.createCustomTempFile
@@ -232,9 +233,9 @@ class AddFragment : Fragment() {
 
     private fun imageShowSetup(myFile: File) {
         this.myFile = myFile
-        val imgSize = myFile.length() / 1024
+        val imgSize = myFile.length() / FILE_SIZE_MB
         println(imgSize)
-        if (imgSize > 1024)
+        if (imgSize > FILE_SIZE_MB)
             binding.tvImgSize.visibility = View.VISIBLE
         else
             binding.tvImgSize.visibility = View.GONE

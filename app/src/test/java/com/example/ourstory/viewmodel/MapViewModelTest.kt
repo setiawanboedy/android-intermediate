@@ -37,7 +37,7 @@ class MapViewModelTest {
     private val mapParams = MapParams(location = 1)
 
     @Test
-    fun `Get stories with location success`() = runTest {
+    fun `Get Stories with Location Success`() = runTest {
         val expectation = storiesResponseDummy
         val data = MutableLiveData<Sealed<StoriesResponse>>()
         data.value = Sealed.success(expectation)
@@ -54,7 +54,7 @@ class MapViewModelTest {
     }
 
     @Test
-    fun `Get stories with location error`() = runTest {
+    fun `Get Stories with Location Error`() = runTest {
         val data = MutableLiveData<Sealed<StoriesResponse>>()
         data.value = Sealed.error("UNKNOWN ERROR", null)
 

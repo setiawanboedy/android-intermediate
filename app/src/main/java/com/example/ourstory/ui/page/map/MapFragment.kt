@@ -58,6 +58,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 Status.LOADING -> {}
                 Status.ERROR -> {
                     binding.root.snackBar(resources.getString(R.string.not_found_story_location))
+                    binding.tvMapFailed.visibility = View.VISIBLE
                 }
                 Status.SUCCESS -> {
                     res.data?.listStory?.forEach { story ->

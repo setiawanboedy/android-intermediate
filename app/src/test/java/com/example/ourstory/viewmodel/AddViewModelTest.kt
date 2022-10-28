@@ -38,7 +38,7 @@ class AddViewModelTest {
     private val addRequest = AddRequest(file, "desc", null, null)
 
     @Test
-    fun `Add story success`() = runTest {
+    fun `Add Story Success`() = runTest {
         val expectation = DataDummy.addStoryResponseDummy()
 
         val data = MutableLiveData<Sealed<GenericResponse>>()
@@ -55,7 +55,7 @@ class AddViewModelTest {
     }
 
     @Test
-    fun `Add story error`() = runTest {
+    fun `Add Story Error`() = runTest {
 
         val data = MutableLiveData<Sealed<GenericResponse>>()
         data.value = Sealed.error("UNKNOWN ERROR", null)
