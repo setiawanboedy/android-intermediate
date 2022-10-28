@@ -53,8 +53,8 @@
     <string name="pw_not_match">Password doesn\'t match</string>
     <string name="image_too_large">Image too large, max size 1MB</string>
     <string name="add_success">Add story success</string>
-    <string name="story_not_found">Story not found</string>
     <string name="reload">reload</string>
     <string name="title_map">Map</string>
     <string name="not_found_story_location">Not found story with location</string>
+    <string name="add_location">Add location</string>
 </resources>

@@ -21,6 +21,7 @@ import com.example.ourstory.session.Preferences
 import com.example.ourstory.session.SessionManager
 import com.example.ourstory.ui.view.PopDialog
 import com.example.ourstory.utils.Constants
+import com.example.ourstory.utils.Constants.BASE_URL_MOCK
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -86,7 +87,7 @@ object Injection {
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit =
         Retrofit.Builder()
             .client(okHttpClient)
-            .baseUrl(BASE_URL)
+            .baseUrl(BASE_URL_MOCK ?: BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 

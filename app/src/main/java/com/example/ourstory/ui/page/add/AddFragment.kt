@@ -1,5 +1,6 @@
 package com.example.ourstory.ui.page.add
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
@@ -27,11 +28,14 @@ import com.example.ourstory.R
 import com.example.ourstory.core.Status
 import com.example.ourstory.databinding.FragmentAddBinding
 import com.example.ourstory.domain.request.AddRequest
+import com.example.ourstory.utils.Constants.LOCATION_PERMISSION
 import com.example.ourstory.utils.Constants.REQUIRED_PERMISSIONS
 import com.example.ourstory.utils.createCustomTempFile
 import com.example.ourstory.utils.snackBar
 import com.example.ourstory.utils.textTrim
 import com.example.ourstory.utils.uriToFile
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 
@@ -45,6 +49,10 @@ class AddFragment : Fragment() {
     private var myFile: File? = null
 
     private lateinit var currentPhotoPath: String
+
+    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+    private var lat: Float? = null
+    private var lon: Float? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -61,6 +69,19 @@ class AddFragment : Fragment() {
 
         permission()
 
+        fusedLocationProviderClient =
+            LocationServices.getFusedLocationProviderClient(requireContext())
+
+        binding.swtLocation.setOnCheckedChangeListener { _, isChecked: Boolean ->
+            println(isChecked)
+            if (isChecked) {
+                launcherLocationPermission.launch(LOCATION_PERMISSION)
+            } else {
+                lat = null
+                lon = null
+            }
+        }
+
         binding.btnAdd.setOnClickListener {
             postStory()
         }
@@ -72,17 +93,42 @@ class AddFragment : Fragment() {
         }
         binding.edtDesc.doAfterTextChanged {
             setButton()
-
         }
 
         setButton()
 
     }
 
+    private var launcherLocationPermission =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permission ->
+            when {
+                permission[Manifest.permission.ACCESS_FINE_LOCATION] ?: false -> getMyLastLocation()
+                permission[Manifest.permission.ACCESS_COARSE_LOCATION]
+                    ?: false -> getMyLastLocation()
+                else -> {
+                    binding.swtLocation.isChecked = false
+                    binding.swtLocation.isEnabled = false
+                }
+            }
+        }
+
+    private fun getMyLastLocation() {
+        if (hasPermissions(activity as Context, LOCATION_PERMISSION)) {
+            fusedLocationProviderClient.lastLocation.addOnSuccessListener { location ->
+                if (location != null) {
+                    lat = location.latitude.toFloat()
+                    lon = location.longitude.toFloat()
+                }
+            }
+        } else {
+            launcherLocationPermission.launch(LOCATION_PERMISSION)
+        }
+    }
+
     private fun postStory() {
         val desc = binding.edtDesc.textTrim()
         if (myFile != null) {
-            val request = AddRequest(myFile!!, desc, lat = null, lon = null)
+            val request = AddRequest(file = myFile!!, description = desc, lat = lat, lon = lon)
             addStory(request)
         } else
             binding.root.snackBar(getString(R.string.add_image))

@@ -33,32 +33,6 @@ class SafeResponse {
             }
         }
 
-    suspend fun <T, U, R> enqueue(
-        req1: T,
-        req2: U,
-        converter: (ResponseBody) -> GenericResponse?,
-        call: suspend (T, U) -> Response<R>
-    ): Sealed<R> =
-        try {
-            val res = call(req1, req2)
-            val body = res.body()
-            val errorBody = res.errorBody()
-
-            if (res.isSuccessful && body != null) {
-                Sealed.success(body)
-            } else if (errorBody != null) {
-                val parsedError = converter(errorBody)
-                Sealed.error(parsedError?.message.toString(), null)
-            } else {
-                Sealed.error(UNKNOWN_ERROR, null)
-            }
-        } catch (e: Exception) {
-            when (e) {
-                is SocketTimeoutException -> Sealed.error(TIMEOUT_ERROR, null)
-                else -> Sealed.error(UNKNOWN_ERROR, null)
-            }
-        }
-
     suspend fun <T, U, S, V, R> enqueue(
         req1: T,
         req2: U,

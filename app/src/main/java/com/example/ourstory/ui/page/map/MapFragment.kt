@@ -89,17 +89,16 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
                         }
                         map.setOnInfoWindowClickListener {
-                            for (i in res.data.listStory) {
-                                if (i.lat != null && i.lon != null) {
-                                    val latLng = LatLng(i.lat, i.lon)
-                                    if (it.title == i.name && it.position == latLng) {
-                                        val intent =
-                                            Intent(requireActivity(), DetailActivity::class.java)
-                                        intent.putExtra(STORY, i)
-                                        startActivity(intent)
-                                    }
+                            res.data.listStory.asSequence()
+                                .filter { a -> a.lat != null && a.lon != null }.filter { b ->
+                                    val latLng = LatLng(b.lat!!, b.lon!!)
+                                    it.title == b.name && it.position == latLng
+                                }.forEach { story ->
+                                    val intent =
+                                        Intent(requireActivity(), DetailActivity::class.java)
+                                    intent.putExtra(STORY, story)
+                                    startActivity(intent)
                                 }
-                            }
                         }
                     }
                 }

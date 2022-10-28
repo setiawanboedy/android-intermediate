@@ -13,10 +13,17 @@ object Constants {
     const val SPLASH_DURATION: Long = 300
     const val INIT_PAGE_INDEX = 1
 
+    var BASE_URL_MOCK: String? = null
+
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     val REQUIRED_PERMISSIONS = arrayOf(
         Manifest.permission.CAMERA,
         Manifest.permission.READ_MEDIA_IMAGES,
         Manifest.permission.READ_EXTERNAL_STORAGE,
+    )
+
+    val LOCATION_PERMISSION = arrayOf(
+        Manifest.permission.ACCESS_COARSE_LOCATION,
+        Manifest.permission.ACCESS_FINE_LOCATION
     )
 }

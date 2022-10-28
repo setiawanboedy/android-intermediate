@@ -23,7 +23,7 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -53,7 +53,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/tv_img_size" />
 
             <ImageButton
-                android:id="@+id/ib_camera"
+                android:id="@+id/ibCamera"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_16"
@@ -84,7 +84,7 @@
                 android:text="@string/description"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ib_camera" />
+                app:layout_constraintTop_toBottomOf="@+id/swt_location" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/edt_input4"
@@ -102,7 +102,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/tv_desc">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edt_desc"
+                    android:id="@+id/edtDesc"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textMultiLine"
@@ -151,6 +151,25 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/iv_photo" />
+
+            <TextView
+                android:id="@+id/textView7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/add_location"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ib_gallery" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/swt_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView7" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 

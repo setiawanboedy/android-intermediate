@@ -1,0 +1,15 @@
+{
+  "error": false,
+  "message": "Stories fetched successfully",
+  "listStory": [
+    {
+      "id": "story-Wyefdsfdsfdsf",
+      "name": "sinaga",
+      "description": "sinaga location",
+      "photoUrl": "https://dicoding-web-img.sgp1.cdn.digitaloceanspaces.com/original/academy/dos:2979e516a20f11ebf05f0d735a5b288120220221083443.jpeg",
+      "createdAt": "2022-01-27T08:09:49.574Z",
+      "lat": null,
+      "lon": null
+    }
+  ]
+}
