@@ -2,6 +2,7 @@ package com.example.ourstory.ui.page.auth
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import com.example.ourstory.core.Sealed
 import com.example.ourstory.domain.request.LoginRequest
 import com.example.ourstory.domain.request.RegisterRequest
@@ -17,6 +18,7 @@ class AuthViewModel @Inject constructor(
     private val login: LoginCase,
     private val register: RegisterCase,
 ) : ViewModel() {
-    fun login(req: LoginRequest): LiveData<Sealed<LoginResponse>> = login.call(req)
-    fun register(req: RegisterRequest): LiveData<Sealed<RegisterResponse>> = register.call(req)
+    fun login(req: LoginRequest): LiveData<Sealed<LoginResponse>> = login.call(req).asLiveData()
+    fun register(req: RegisterRequest): LiveData<Sealed<RegisterResponse>> =
+        register.call(req).asLiveData()
 }

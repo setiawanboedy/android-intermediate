@@ -14,14 +14,14 @@ object DataDummy {
 
     fun loginResponseDummy(): LoginResponse {
         val user = UserModel(
-            userId = "NCwjLkdjfQGLrdaH2sdf",
-            name = "Sinaga",
-            token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJ1c2VyLU5Dd2pMenZRR0xyZGFIMnMiLCJpYXQiOjE2NjE0NzEyNzR9.B3u5kf8nYrYwx2Tftn5G8jDM4U5BR9HvNiDT9fZludA"
+            userId = "user-ToGB-Jft6nRhrtyB",
+            name = "rendi",
+            token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJ1c2VyLVRvR0ItSmZ0Nm5SaHJ0eUIiLCJpYXQiOjE2NjczNzEyMDZ9.daekK1xbGPvVyogb49DlPeDCNWyXh8spkzSU_knU-3A"
         )
 
         return LoginResponse(
             error = false,
-            message = "Success",
+            message = "success",
             user
         )
     }
@@ -66,11 +66,13 @@ object DataDummy {
 
 
     fun requestBodyDummy(): RequestBody = "Test".toRequestBody()
-    fun registerResponseDummy(): RegisterResponse = RegisterResponse(false, "success")
+    fun registerResponseDummy(): RegisterResponse = RegisterResponse(false, "User created")
     fun multipartFileDummy(): MultipartBody.Part = MultipartBody.Part.create("Test".toRequestBody())
     fun addStoryResponseDummy(): GenericResponse = GenericResponse(false, "success")
-    fun registerErrorDummy(): RegisterResponse = RegisterResponse(true, "invalid email")
-    fun loginErrorDummy(): GenericResponse = GenericResponse(true, "user not found")
+    fun registerErrorDummy(): RegisterResponse =
+        RegisterResponse(true, "\"email\" must be a valid email")
+
+    fun loginErrorDummy(): LoginResponse = LoginResponse(true, "User not found", null)
     fun uploadErrorDummy(): GenericResponse = GenericResponse(true, "UNKNOWN ERROR")
     fun storiesErrorDummy(): StoriesResponse =
         StoriesResponse(true, "UNKNOWN ERROR", listOf<StoryModel>())

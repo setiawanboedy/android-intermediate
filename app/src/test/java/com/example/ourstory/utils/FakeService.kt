@@ -13,7 +13,7 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Response
 
-class ServiceDummy : AuthService, PostService, GetService {
+class FakeService : AuthService, PostService, GetService {
     override suspend fun register(request: RegisterRequest): Response<RegisterResponse> =
         Response.success(DataDummy.registerResponseDummy())
 
@@ -37,7 +37,7 @@ class ServiceDummy : AuthService, PostService, GetService {
     fun registerError(): RegisterResponse =
         DataDummy.registerErrorDummy()
 
-    fun loginError(): GenericResponse =
+    fun loginError(): LoginResponse =
         DataDummy.loginErrorDummy()
 
     fun uploadError(): GenericResponse =

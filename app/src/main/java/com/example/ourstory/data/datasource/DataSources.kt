@@ -14,10 +14,6 @@ import com.example.ourstory.domain.response.GenericResponse
 import com.example.ourstory.domain.response.LoginResponse
 import com.example.ourstory.domain.response.RegisterResponse
 import com.example.ourstory.domain.response.StoriesResponse
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -32,40 +28,27 @@ class DataSources @Inject constructor(
     private val getService: GetService,
     private val postService: PostService,
 ) {
-    fun register(req: RegisterRequest): Flow<Sealed<RegisterResponse>> = flow {
-        emit(Sealed.loading(null))
+    suspend fun register(req: RegisterRequest): Sealed<RegisterResponse> =
+        safeResponse.enqueue(req, converter::converterGenericError, authService::register)
 
-        val res = safeResponse.enqueue(req, converter::converterGenericError, authService::register)
-        emit(res)
-    }.flowOn(Dispatchers.IO)
+    suspend fun login(req: LoginRequest): Sealed<LoginResponse> =
+        safeResponse.enqueue(req, converter::converterGenericError, authService::login)
 
-    fun login(req: LoginRequest): Flow<Sealed<LoginResponse>> = flow {
-        emit(Sealed.loading(null))
-
-        val res = safeResponse.enqueue(req, converter::converterGenericError, authService::login)
-        emit(res)
-    }.flowOn(Dispatchers.IO)
-
-    fun getStoriesLocation(params: MapParams): Flow<Sealed<StoriesResponse>> = flow {
-        emit(Sealed.loading(null))
-
-        val res = safeResponse.enqueue(
+    suspend fun getStoriesLocation(params: MapParams): Sealed<StoriesResponse> =
+        safeResponse.enqueue(
             params.location,
             converter::converterGenericError,
             getService::getStoriesLocation
         )
-        emit(res)
-    }.flowOn(Dispatchers.IO)
 
-    fun addStory(req: AddRequest): Flow<Sealed<GenericResponse>> = flow {
-        emit(Sealed.loading(null))
 
+    suspend fun addStory(req: AddRequest): Sealed<GenericResponse> {
         val desc = req.description.toRequestBody("text/plain".toMediaType())
         val imageFile = req.file.asRequestBody("image/jpeg".toMediaTypeOrNull())
         val imageMultipart: MultipartBody.Part =
             MultipartBody.Part.createFormData("photo", req.file.name, imageFile)
 
-        val res = safeResponse.enqueue(
+        return safeResponse.enqueue(
             desc,
             imageMultipart,
             req.lat,
@@ -73,6 +56,5 @@ class DataSources @Inject constructor(
             converter::converterGenericError,
             postService::addStory
         )
-        emit(res)
-    }.flowOn(Dispatchers.IO)
+    }
 }

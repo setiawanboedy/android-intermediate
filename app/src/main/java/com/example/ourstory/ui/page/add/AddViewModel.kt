@@ -2,6 +2,7 @@ package com.example.ourstory.ui.page.add
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import com.example.ourstory.core.Sealed
 import com.example.ourstory.domain.request.AddRequest
 import com.example.ourstory.domain.response.GenericResponse
@@ -13,5 +14,5 @@ import javax.inject.Inject
 class AddViewModel @Inject constructor(
     private val add: AddCase
 ) : ViewModel() {
-    fun addStory(req: AddRequest): LiveData<Sealed<GenericResponse>> = add.call(req)
+    fun addStory(req: AddRequest): LiveData<Sealed<GenericResponse>> = add.call(req).asLiveData()
 }

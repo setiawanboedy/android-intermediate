@@ -8,6 +8,10 @@ import com.example.ourstory.domain.params.MapParams
 import com.example.ourstory.domain.params.StoryParams
 import com.example.ourstory.domain.repository.Repository
 import com.example.ourstory.domain.response.StoriesResponse
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 class StoriesCase @Inject constructor(
@@ -16,7 +20,12 @@ class StoriesCase @Inject constructor(
     fun getPageStory(params: StoryParams): LiveData<PagingData<StoryModel>> =
         repository.getStories(params)
 
-    override fun call(req: MapParams): LiveData<Sealed<StoriesResponse>> =
-        repository.getStoriesLocation(req)
+    override fun call(req: MapParams): Flow<Sealed<StoriesResponse>> = flow {
+        emit(Sealed.loading(null))
+
+        val res = repository.getStoriesLocation(req)
+        emit(res)
+    }.flowOn(Dispatchers.IO)
+
 
 }

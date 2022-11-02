@@ -1,6 +1,7 @@
 package com.example.ourstory.data.repository
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.AsyncPagingDataDiffer
 import androidx.paging.PagingData
@@ -10,32 +11,34 @@ import com.example.ourstory.core.SafeResponse
 import com.example.ourstory.core.Sealed
 import com.example.ourstory.core.Status
 import com.example.ourstory.data.datasource.DataSources
+import com.example.ourstory.data.local.db.StoryDatabase
 import com.example.ourstory.data.network.get.GetService
 import com.example.ourstory.data.network.post.AuthService
 import com.example.ourstory.data.network.post.PostService
 import com.example.ourstory.domain.model.StoryModel
 import com.example.ourstory.domain.params.MapParams
 import com.example.ourstory.domain.params.StoryParams
+import com.example.ourstory.domain.repository.Repository
+import com.example.ourstory.domain.request.AddRequest
 import com.example.ourstory.domain.request.LoginRequest
 import com.example.ourstory.domain.request.RegisterRequest
-import com.example.ourstory.domain.response.StoriesResponse
+import com.example.ourstory.domain.response.GenericResponse
+import com.example.ourstory.session.SessionManager
 import com.example.ourstory.ui.page.home.StoryPageAdapter
 import com.example.ourstory.utils.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
+import kotlinx.coroutines.test.runTest
+import org.junit.*
 import org.junit.runner.RunWith
-import org.mockito.Mock
-import org.mockito.Mockito
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
-import org.mockito.junit.MockitoJUnitRunner
+import org.robolectric.RobolectricTestRunner
+import java.io.File
 
-@ExperimentalCoroutinesApi
-@RunWith(MockitoJUnitRunner::class)
+
+@OptIn(ExperimentalCoroutinesApi::class)
+@RunWith(RobolectricTestRunner::class)
 class RepositoryImplTest {
     @get:Rule
     val instantExecutorRule = InstantTaskExecutorRule()
@@ -43,25 +46,21 @@ class RepositoryImplTest {
     @get:Rule
     var coroutinesRuleTest = CoroutinesRuleTest()
 
-    @Mock
-    private lateinit var source: DataSources
+    private lateinit var authService: AuthService
+    private lateinit var postService: PostService
+    private lateinit var getService: GetService
+    private lateinit var safeResponse: SafeResponse
+    private lateinit var converter: ErrorParser
 
-    @Mock
-    private lateinit var sourcesMock: DataSources
+    private lateinit var repoMock: Repository
 
-    @Mock
-    private lateinit var repoMock: RepositoryImpl
+    private lateinit var database: StoryDatabase
 
-    private val registerRequest = RegisterRequest("Sinaga", "sinaga@gmail.com", "sinagarendi")
-    private val registerResponse = DataDummy.registerResponseDummy()
-    private val registerErrorDummy = DataDummy.registerErrorDummy()
+    private lateinit var photo: File
 
-    private val loginRequest = LoginRequest("sinaga@gmail.com", "sinagarendi")
-    private val loginResponse = DataDummy.loginResponseDummy()
-    private val loginErrorDummy = DataDummy.loginErrorDummy()
+    private lateinit var sources: DataSources
+    private lateinit var repo: RepositoryImpl
 
-    private val storiesDummy = DataDummy.storiesResponseDummy()
-    private val storiesErrorDummy = DataDummy.storiesErrorDummy()
 
     private val uploadResponseDummy = DataDummy.addStoryResponseDummy()
 
@@ -70,102 +69,106 @@ class RepositoryImplTest {
 
     @Before
     fun setUp() {
-        val authService = mock(AuthService::class.java)
-        val postService = mock(PostService::class.java)
-        val getService = mock(GetService::class.java)
-        val safeResponse = mock(SafeResponse::class.java)
-        val converter = mock(ErrorParser::class.java)
+        val session = mock(SessionManager::class.java)
+        authService = Helper.authService()
+        postService = Helper.postService()
+        getService = Helper.getService(session)
+        safeResponse = Helper.safeResponse()
+        converter = Helper.errorParser()
+        database = Helper.getDatabase()
+        sources = DataSources(safeResponse, converter, authService, getService, postService)
+        repo = RepositoryImpl(sources, database, getService)
+//        photo = Helper.getPhoto()
+    }
 
-        source = DataSources(safeResponse, converter, authService, getService, postService)
-        sourcesMock = mock(DataSources::class.java)
-        repoMock = mock(RepositoryImpl::class.java)
+    @After
+    fun tearDown() {
+        database.close()
     }
 
     @Test
-    fun `User Register Success`() = runBlocking {
-        val service = ServiceDummy()
-        val expectation = registerResponse
-        val actual = service.register(registerRequest).body()
-        Assert.assertNotNull(actual)
-        Assert.assertEquals(expectation, actual)
+    fun `User Register Success`() = runTest {
+        val randomString = java.util.UUID.randomUUID().toString()
+        val registerRequest =
+            RegisterRequest("Sinaga", "sinaga${randomString}@gmail.com", "sinagarendi")
+        val expectation = DataDummy.registerResponseDummy()
+        val actual = repo.register(registerRequest)
+        Assert.assertTrue(actual.status == Status.SUCCESS)
+        Assert.assertEquals(expectation.message, actual.data?.message)
     }
 
     @Test
-    fun `User Register Error`() {
-        val service = ServiceDummy()
-        val expectation = registerErrorDummy
-        val actual = service.registerError()
-        Assert.assertNotNull(actual)
-        Assert.assertEquals(expectation, actual)
+    fun `User Register Error - Invalid email`() = runBlocking {
+        val registerRequest = RegisterRequest("rendi", "sinagagmail.com", "sinagarendi")
+        val expectation = DataDummy.registerErrorDummy()
+        val actual = repo.register(registerRequest)
+        Assert.assertTrue(actual.status == Status.ERROR)
+        Assert.assertEquals(expectation.message, actual.message)
+
     }
 
     @Test
-    fun `User Login Success`() = runBlocking {
-        val service = ServiceDummy()
-        val expectation = loginResponse
-        val actual = service.login(loginRequest).body()
-        Assert.assertNotNull(actual)
-        Assert.assertEquals(expectation, actual)
+    fun `User Login Success`() = runTest {
+        val loginRequest = LoginRequest("sinaga@gmail.com", "sinagarendi")
+        val expectation = DataDummy.loginResponseDummy()
+        val actual = repo.login(loginRequest)
+        println(actual)
+        Assert.assertTrue(actual.status == Status.SUCCESS)
+        Assert.assertEquals(expectation.message, actual.data?.message)
     }
 
     @Test
-    fun `User Login Error`() {
-        val service = ServiceDummy()
-        val expectation = loginErrorDummy
-        val actual = service.loginError()
-        Assert.assertNotNull(actual)
-        Assert.assertEquals(expectation, actual)
+    fun `User Login Error - User not found`() = runBlocking {
+        val expectation = DataDummy.loginErrorDummy()
+        val actual = repo.login(LoginRequest("jldjfo@gmail.com", "sfjlskdjlf"))
+        Assert.assertTrue(actual.status == Status.ERROR)
+        Assert.assertEquals(expectation.message, actual.message)
     }
 
     @Test
-    fun `Get stories with location success`() {
-        val expectation = MutableLiveData<Sealed<StoriesResponse>>()
-        expectation.value = Sealed.success(storiesDummy)
+    fun `Get stories with location success`() = runBlocking {
+        val expectation = DataDummy.storiesResponseDummy()
 
         val params = MapParams(location = 1)
-        `when`(repoMock.getStoriesLocation(params)).thenReturn(expectation)
 
-        val actual = repoMock.getStoriesLocation(params).getOrAwaitValue()
-        Mockito.verify(repoMock).getStoriesLocation(params)
-        if (actual.status == Status.SUCCESS) {
-            Assert.assertNotNull(actual)
-            Assert.assertEquals(expectation.value, actual)
-        }
+        val actual = repo.getStoriesLocation(params)
+        Assert.assertTrue(actual.status == Status.SUCCESS)
+        Assert.assertEquals(expectation.message, actual.data?.message)
     }
 
     @Test
-    fun `Get stories with location error`() {
-        val expectation = MutableLiveData<Sealed<StoriesResponse>>()
-        expectation.value = Sealed.error(storiesErrorDummy.message, null)
-        val params = MapParams(location = 1)
-        `when`(repoMock.getStoriesLocation(params)).thenReturn(expectation)
-
-        val actual = repoMock.getStoriesLocation(params).getOrAwaitValue()
-        Mockito.verify(repoMock).getStoriesLocation(params)
-        if (actual.status == Status.ERROR) {
-            Assert.assertNotNull(actual)
-            Assert.assertEquals(expectation.value, actual)
-        }
+    fun `Get stories with location error - wrong token`() = runBlocking {
+        val expectation = DataDummy.storiesErrorDummy()
+        val params = MapParams(location = 0)
+        val actual = repo.getStoriesLocation(params)
+        println(actual)
     }
 
     @Test
     fun `Upload Story Success`() = runBlocking {
-        val service = ServiceDummy()
-        val expectation = uploadResponseDummy
-        val actual = service.addStory(descDummy, multipartDummy, null, null).body()
 
-        Assert.assertNotNull(actual)
-        Assert.assertEquals(expectation, actual)
+
+        val addRequest = AddRequest(photo, "description", null, null)
+        val expectation = MutableLiveData<Sealed<GenericResponse>>()
+//        expectation.value =
+//            Sealed.success(service.addStory(descDummy, multipartDummy, null, null).body())
+//        val actual = repo.addStory(addRequest)
+//
+//        Assert.assertNotNull(actual)
+//        if (actual.status == Status.SUCCESS) {
+//            Assert.assertNotNull(actual)
+//            Assert.assertEquals(expectation.value, actual)
+//        }
     }
 
     @Test
-    fun `Upload story error`() {
-        val service = ServiceDummy()
-        val expected = DataDummy.uploadErrorDummy()
-        val actual = service.uploadError()
-
-        Assert.assertNotNull(actual)
-        Assert.assertEquals(expected, actual)
+    fun `Upload story error`() = runBlocking {
+//        val service = ServiceDummy()
+//        val expected = DataDummy.uploadErrorDummy()
+//        val actual = service.uploadError()
+//
+//        Assert.assertNotNull(actual)
+//        Assert.assertEquals(expected, actual)
     }
 
     @Test
@@ -173,15 +176,15 @@ class RepositoryImplTest {
         val dataDummy = DataDummy.listStoriesDummy()
         val data = PageDataSourceTest.snapshot(dataDummy)
 
-        val expectation = MutableLiveData<PagingData<StoryModel>>()
-        expectation.value = data
+        val liveData = MutableLiveData<PagingData<StoryModel>>()
+        liveData.value = data
 
-        val response = DataDummy.storiesResponseDummy()
         val storyParams = StoryParams(5, 20)
-        `when`(repoMock.getStories(storyParams)).thenReturn(expectation)
+
+        `when`(repoMock.getStories(storyParams))
+            .thenReturn(liveData as LiveData<PagingData<StoryModel>>)
 
         val actual = repoMock.getStories(storyParams).getOrAwaitValue()
-        Mockito.verify(repoMock).getStories(storyParams)
 
         val differ = AsyncPagingDataDiffer(
             diffCallback = StoryPageAdapter.differCallback,
@@ -192,24 +195,13 @@ class RepositoryImplTest {
 
         differ.submitData(actual)
         Assert.assertNotNull(differ.snapshot())
-        Assert.assertEquals(response.listStory.size, differ.snapshot().size)
+        Assert.assertEquals(dataDummy.size, differ.snapshot().size)
     }
 
     private val listUpdateCallback = object : ListUpdateCallback {
-        override fun onInserted(position: Int, count: Int) {
-
-        }
-
-        override fun onRemoved(position: Int, count: Int) {
-
-        }
-
-        override fun onMoved(fromPosition: Int, toPosition: Int) {
-
-        }
-
-        override fun onChanged(position: Int, count: Int, payload: Any?) {
-
-        }
+        override fun onInserted(position: Int, count: Int) {}
+        override fun onRemoved(position: Int, count: Int) {}
+        override fun onMoved(fromPosition: Int, toPosition: Int) {}
+        override fun onChanged(position: Int, count: Int, payload: Any?) {}
     }
 }

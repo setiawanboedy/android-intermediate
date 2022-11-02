@@ -42,11 +42,11 @@ class RepositoryImpl @Inject constructor(
             }
     }
 
-    override fun register(req: RegisterRequest): LiveData<Sealed<RegisterResponse>> =
-        dataSources.register(req).asLiveData()
+    override suspend fun register(req: RegisterRequest): Sealed<RegisterResponse> =
+        dataSources.register(req)
 
-    override fun login(req: LoginRequest): LiveData<Sealed<LoginResponse>> =
-        dataSources.login(req).asLiveData()
+    override suspend fun login(req: LoginRequest): Sealed<LoginResponse> =
+        dataSources.login(req)
 
     @OptIn(ExperimentalPagingApi::class)
     override fun getStories(params: StoryParams): LiveData<PagingData<StoryModel>> {
@@ -64,9 +64,9 @@ class RepositoryImpl @Inject constructor(
         return dataPager.asLiveData()
     }
 
-    override fun getStoriesLocation(params: MapParams): LiveData<Sealed<StoriesResponse>> =
-        dataSources.getStoriesLocation(params).asLiveData()
+    override suspend fun getStoriesLocation(params: MapParams): Sealed<StoriesResponse> =
+        dataSources.getStoriesLocation(params)
 
-    override fun addStory(req: AddRequest): LiveData<Sealed<GenericResponse>> =
-        dataSources.addStory(req).asLiveData()
+    override suspend fun addStory(req: AddRequest): Sealed<GenericResponse> =
+        dataSources.addStory(req)
 }

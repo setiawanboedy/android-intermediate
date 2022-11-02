@@ -2,6 +2,7 @@ package com.example.ourstory.ui.page.map
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import com.example.ourstory.core.Sealed
 import com.example.ourstory.domain.params.MapParams
 import com.example.ourstory.domain.response.StoriesResponse
@@ -14,5 +15,5 @@ class MapViewModel @Inject constructor(
     private val story: StoriesCase
 ) : ViewModel() {
     fun getStoriesLocation(params: MapParams): LiveData<Sealed<StoriesResponse>> =
-        story.call(params)
+        story.call(params).asLiveData()
 }

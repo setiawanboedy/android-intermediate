@@ -22,6 +22,7 @@ import com.example.ourstory.session.SessionManager
 import com.example.ourstory.ui.view.PopDialog
 import com.example.ourstory.utils.Constants
 import com.example.ourstory.utils.Constants.BASE_URL_MOCK
+import com.example.ourstory.utils.test.TokenTest
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -40,6 +41,10 @@ object Injection {
     @Provides
     @Singleton
     fun providePopDialog() = PopDialog()
+
+    @Provides
+    @Singleton
+    fun provideTokenTest() = TokenTest()
 
     @Provides
     @Singleton
@@ -76,9 +81,10 @@ object Injection {
     @Singleton
     fun provideOkHttpClient(
         interceptor: HttpLoggingInterceptor,
-        session: SessionManager
+        session: SessionManager,
+        tokenTest: TokenTest
     ): OkHttpClient = OkHttpClient.Builder()
-        .addInterceptor(InterceptorApi(session))
+        .addInterceptor(InterceptorApi(session, tokenTest))
         .addInterceptor(interceptor)
         .build()
 

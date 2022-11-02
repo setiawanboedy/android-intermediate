@@ -15,9 +15,9 @@ import com.example.ourstory.domain.response.RegisterResponse
 import com.example.ourstory.domain.response.StoriesResponse
 
 interface Repository {
-    fun register(req: RegisterRequest): LiveData<Sealed<RegisterResponse>>
-    fun login(req: LoginRequest): LiveData<Sealed<LoginResponse>>
+    suspend fun register(req: RegisterRequest): Sealed<RegisterResponse>
+    suspend fun login(req: LoginRequest): Sealed<LoginResponse>
     fun getStories(params: StoryParams): LiveData<PagingData<StoryModel>>
-    fun getStoriesLocation(params: MapParams): LiveData<Sealed<StoriesResponse>>
-    fun addStory(req: AddRequest): LiveData<Sealed<GenericResponse>>
+    suspend fun getStoriesLocation(params: MapParams): Sealed<StoriesResponse>
+    suspend fun addStory(req: AddRequest): Sealed<GenericResponse>
 }
