@@ -1,25 +1,27 @@
 package com.example.ourstory.viewmodel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.MutableLiveData
 import com.example.ourstory.core.Sealed
+import com.example.ourstory.core.Status
 import com.example.ourstory.domain.request.LoginRequest
 import com.example.ourstory.domain.request.RegisterRequest
-import com.example.ourstory.domain.response.LoginResponse
-import com.example.ourstory.domain.response.RegisterResponse
+import com.example.ourstory.domain.usecase.LoginCase
+import com.example.ourstory.domain.usecase.RegisterCase
 import com.example.ourstory.ui.page.auth.AuthViewModel
 import com.example.ourstory.utils.CoroutinesRuleTest
 import com.example.ourstory.utils.DataDummy
 import com.example.ourstory.utils.getOrAwaitValue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mock
 import org.mockito.Mockito
+import org.mockito.Mockito.mock
 import org.mockito.junit.MockitoJUnitRunner
 
 @ExperimentalCoroutinesApi
@@ -31,74 +33,95 @@ class AuthViewModelTest {
     @get:Rule
     var coroutinesRuleTest = CoroutinesRuleTest()
 
-    @Mock
-    lateinit var viewModel: AuthViewModel
-
-    private val loginResponse = DataDummy.loginResponseDummy()
+    private lateinit var loginCase: LoginCase
+    private lateinit var registerCase: RegisterCase
+    private lateinit var authViewModel: AuthViewModel
 
     private val loginRequest = LoginRequest("sinaga@gmail.com", "sinagarendi")
     private val registerRequest = RegisterRequest("sinaga", "sinaga@gmail.com", "sinagarendi")
 
+    @Before
+    fun setUp() {
+
+        loginCase = mock(LoginCase::class.java)
+        registerCase = mock(RegisterCase::class.java)
+        authViewModel = AuthViewModel(loginCase, registerCase)
+    }
+
     @Test
     fun `User Login Success`() = runTest {
-        val expectation = loginResponse
-        val login = MutableLiveData<Sealed<LoginResponse>>()
-        login.value = Sealed.success(expectation)
+        val expectation = flowOf(
+            Sealed.success(DataDummy.loginResponseDummy())
+        )
 
-//        Mockito.`when`(viewModel.login(loginRequest)).thenReturn(login)
-//        val actual = viewModel.login(loginRequest).getOrAwaitValue()
-//        Mockito.verify(viewModel).login(loginRequest)
+        Mockito.`when`(loginCase.call(loginRequest)).thenReturn(expectation)
+        val actual = authViewModel.login(loginRequest).getOrAwaitValue()
+        Mockito.verify(loginCase).call(loginRequest)
 
         advanceUntilIdle()
 
-//        Assert.assertNotNull(actual)
-//        Assert.assertEquals(actual.data, expectation)
+        Assert.assertNotNull(actual)
+        Assert.assertTrue(actual.status == Status.SUCCESS)
+        expectation.collect { res ->
+            Assert.assertEquals(res.data?.message, actual.data?.message)
+        }
+
     }
 
     @Test
     fun `User Login Error`() = runTest {
-        val login = MutableLiveData<Sealed<LoginResponse>>()
-        login.value = Sealed.error("UNKNOWN ERROR", null)
+        val expectation = flowOf(
+            Sealed.error("User not found", null)
+        )
 
-//        Mockito.`when`(viewModel.login(loginRequest)).thenReturn(login)
-//        val actual = viewModel.login(loginRequest).getOrAwaitValue()
-//        Mockito.verify(viewModel).login(loginRequest)
-//
-//        advanceUntilIdle()
-//
-//        Assert.assertNotNull(actual)
-//        Assert.assertEquals(login.value, actual)
+        Mockito.`when`(loginCase.call(loginRequest)).thenReturn(expectation)
+        val actual = authViewModel.login(loginRequest).getOrAwaitValue()
+        Mockito.verify(loginCase).call(loginRequest)
+
+        advanceUntilIdle()
+
+        Assert.assertNotNull(actual)
+        Assert.assertTrue(actual.status == Status.ERROR)
+        expectation.collect { res ->
+            Assert.assertEquals(res.message, actual.message)
+        }
     }
 
     @Test
     fun `User Register Success`() = runTest {
-        val expectation = DataDummy.registerResponseDummy()
-        val register = MutableLiveData<Sealed<RegisterResponse>>()
-        register.value = Sealed.success(expectation)
+        val expectation = flowOf(
+            Sealed.success(DataDummy.registerResponseDummy())
+        )
 
-        Mockito.`when`(viewModel.register(registerRequest)).thenReturn(register)
-        val actual = viewModel.register(registerRequest).getOrAwaitValue()
-        Mockito.verify(viewModel).register(registerRequest)
+        Mockito.`when`(registerCase.call(registerRequest)).thenReturn(expectation)
+        val actual = authViewModel.register(registerRequest).getOrAwaitValue()
+        Mockito.verify(registerCase).call(registerRequest)
 
         advanceUntilIdle()
 
         Assert.assertNotNull(actual)
-        Assert.assertEquals(actual.data, expectation)
+        Assert.assertTrue(actual.status == Status.SUCCESS)
+        expectation.collect { res ->
+            Assert.assertEquals(res.data, actual.data)
+        }
     }
 
     @Test
     fun `User Register Error`() = runTest {
+        val expectation = flowOf(
+            Sealed.error("\"email\" must be a valid email", null)
+        )
 
-        val register = MutableLiveData<Sealed<RegisterResponse>>()
-        register.value = Sealed.error("UNKNOWN ERROR", null)
-
-        Mockito.`when`(viewModel.register(registerRequest)).thenReturn(register)
-        val actual = viewModel.register(registerRequest).getOrAwaitValue()
-        Mockito.verify(viewModel).register(registerRequest)
+        Mockito.`when`(loginCase.call(loginRequest)).thenReturn(expectation)
+        val actual = authViewModel.login(loginRequest).getOrAwaitValue()
+        Mockito.verify(loginCase).call(loginRequest)
 
         advanceUntilIdle()
 
         Assert.assertNotNull(actual)
-        Assert.assertEquals(register.value, actual)
+        Assert.assertTrue(actual.status == Status.ERROR)
+        expectation.collect { res ->
+            Assert.assertEquals(res.data, actual.data)
+        }
     }
 }

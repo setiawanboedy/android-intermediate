@@ -7,6 +7,7 @@ import androidx.paging.PagingData
 import androidx.recyclerview.widget.ListUpdateCallback
 import com.example.ourstory.domain.model.StoryModel
 import com.example.ourstory.domain.params.StoryParams
+import com.example.ourstory.domain.usecase.StoriesCase
 import com.example.ourstory.ui.page.home.HomeViewModel
 import com.example.ourstory.ui.page.home.StoryPageAdapter
 import com.example.ourstory.utils.CoroutinesRuleTest
@@ -17,11 +18,12 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mock
 import org.mockito.Mockito
+import org.mockito.Mockito.mock
 import org.mockito.junit.MockitoJUnitRunner
 
 @ExperimentalCoroutinesApi
@@ -33,11 +35,16 @@ class HomeViewModelTest {
     @get:Rule
     var coroutinesRuleTest = CoroutinesRuleTest()
 
-    @Mock
-    lateinit var homeViewModel: HomeViewModel
+    private lateinit var homeViewModel: HomeViewModel
 
+    private lateinit var storiesCase: StoriesCase
     private val storyParams = StoryParams(5, 20)
 
+    @Before
+    fun setUp() {
+        storiesCase = mock(StoriesCase::class.java)
+        homeViewModel = HomeViewModel(storiesCase)
+    }
 
     @Test
     fun `Get Stories with Paging Success`() = runTest {
@@ -47,9 +54,13 @@ class HomeViewModelTest {
         val stories = MutableLiveData<PagingData<StoryModel>>()
         stories.value = data
 
-        Mockito.`when`(homeViewModel.getStories(storyParams)).thenReturn(stories)
+        Mockito.`when`(storiesCase.getPageStory(storyParams)).thenReturn(stories)
 
         val actualResult = homeViewModel.getStories(storyParams).getOrAwaitValue()
+        Mockito.verify(storiesCase).getPageStory(storyParams)
+
+        advanceUntilIdle()
+
         val differ = AsyncPagingDataDiffer(
             diffCallback = StoryPageAdapter.differCallback,
             updateCallback = noopListUpdateCallback,
@@ -57,9 +68,6 @@ class HomeViewModelTest {
             workerDispatcher = coroutinesRuleTest.testDispatcher
         )
         differ.submitData(actualResult)
-        advanceUntilIdle()
-
-        Mockito.verify(homeViewModel).getStories(storyParams)
         Assert.assertNotNull(differ.snapshot())
         Assert.assertEquals(dataDummy.size, differ.snapshot().size)
     }

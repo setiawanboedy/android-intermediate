@@ -51,8 +51,8 @@ class DetailActivity : AppCompatActivity() {
             if (story.lat != null && story.lon != null)
                 tvLocation.text = getAddressName(
                     applicationContext, LatLng(
-                        story.lat!!,
-                        story.lon!!
+                        story.lat ?: 0.0,
+                        story.lon ?: 0.0
                     )
                 )
             else

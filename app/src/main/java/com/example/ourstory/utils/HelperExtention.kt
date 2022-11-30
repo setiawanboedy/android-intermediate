@@ -11,7 +11,10 @@ import androidx.core.content.ContextCompat
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
-import java.io.*
+import java.io.File
+import java.io.FileOutputStream
+import java.io.InputStream
+import java.io.OutputStream
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -50,15 +53,8 @@ fun bitmapFromVector(context: Context, resId: Int): BitmapDescriptor? =
 
 @Suppress("DEPRECATION")
 fun getAddressName(context: Context, latLng: LatLng): String? {
-    var addressName: String? = null
     val geocoder = Geocoder(context, Locale.getDefault())
-    try {
-        val list = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
-        if (list != null && list.size != 0) {
-            addressName = list[0].getAddressLine(0)
-        }
-    } catch (e: IOException) {
-        e.printStackTrace()
-    }
-    return addressName
+    val list = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
+
+    return list?.get(0)!!.getAddressLine(0) ?: null
 }

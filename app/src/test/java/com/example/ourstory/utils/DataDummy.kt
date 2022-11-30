@@ -6,9 +6,6 @@ import com.example.ourstory.domain.response.GenericResponse
 import com.example.ourstory.domain.response.LoginResponse
 import com.example.ourstory.domain.response.RegisterResponse
 import com.example.ourstory.domain.response.StoriesResponse
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
-import okhttp3.RequestBody.Companion.toRequestBody
 
 object DataDummy {
 
@@ -65,15 +62,15 @@ object DataDummy {
     }
 
 
-    fun requestBodyDummy(): RequestBody = "Test".toRequestBody()
     fun registerResponseDummy(): RegisterResponse = RegisterResponse(false, "User created")
-    fun multipartFileDummy(): MultipartBody.Part = MultipartBody.Part.create("Test".toRequestBody())
     fun addStoryResponseDummy(): GenericResponse = GenericResponse(false, "success")
     fun registerErrorDummy(): RegisterResponse =
         RegisterResponse(true, "\"email\" must be a valid email")
 
     fun loginErrorDummy(): LoginResponse = LoginResponse(true, "User not found", null)
-    fun uploadErrorDummy(): GenericResponse = GenericResponse(true, "UNKNOWN ERROR")
+    fun addErrorDummy(): GenericResponse =
+        GenericResponse(true, "\"description\" must not be empty")
+
     fun storiesErrorDummy(): StoriesResponse =
-        StoriesResponse(true, "UNKNOWN ERROR", listOf<StoryModel>())
+        StoriesResponse(true, "Invalid token signature", null)
 }
