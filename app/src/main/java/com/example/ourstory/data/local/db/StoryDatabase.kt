@@ -11,7 +11,7 @@ import com.example.ourstory.domain.model.StoryModel
 abstract class StoryDatabase : RoomDatabase() {
     abstract fun storyDao(): Dao
     abstract fun remoteKeyDao(): RemoteDao
-
+    
     companion object {
         @Volatile
         private var instance: StoryDatabase? = null

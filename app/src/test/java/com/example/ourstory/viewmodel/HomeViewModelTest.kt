@@ -70,6 +70,7 @@ class HomeViewModelTest {
         differ.submitData(actualResult)
         Assert.assertNotNull(differ.snapshot())
         Assert.assertEquals(dataDummy.size, differ.snapshot().size)
+        println(differ.snapshot())
     }
 
     private val noopListUpdateCallback = object : ListUpdateCallback {

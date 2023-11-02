@@ -17,7 +17,6 @@ import com.google.android.gms.maps.model.LatLng
 class StoryPageAdapter(private val context: Context) :
     PagingDataAdapter<StoryModel, StoryPageAdapter.ViewHolder>(differCallback) {
 
-    private var listener: ((StoryModel) -> Unit)? = null
 
     companion object {
         val differCallback = object : DiffUtil.ItemCallback<StoryModel>() {
@@ -45,6 +44,7 @@ class StoryPageAdapter(private val context: Context) :
         fun bind(data: StoryModel, listener: ((StoryModel) -> Unit)?) {
             with(binding) {
                 ivPhoto.setImage(data.photoUrl)
+
                 tvCreated.convertDate(data.createdAt, context)
                 tvName.text = data.name
                 if (data.lat != null && data.lon != null)
@@ -59,6 +59,7 @@ class StoryPageAdapter(private val context: Context) :
         }
     }
 
+    private var listener: ((StoryModel) -> Unit)? = null
     fun setOnItemClick(listener: (StoryModel) -> Unit) {
         this.listener = listener
     }

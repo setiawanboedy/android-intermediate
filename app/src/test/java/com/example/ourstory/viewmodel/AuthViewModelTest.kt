@@ -42,7 +42,6 @@ class AuthViewModelTest {
 
     @Before
     fun setUp() {
-
         loginCase = mock(LoginCase::class.java)
         registerCase = mock(RegisterCase::class.java)
         authViewModel = AuthViewModel(loginCase, registerCase)
@@ -65,7 +64,6 @@ class AuthViewModelTest {
         expectation.collect { res ->
             Assert.assertEquals(res.data?.message, actual.data?.message)
         }
-
     }
 
     @Test

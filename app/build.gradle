@@ -88,7 +88,7 @@ dependencies {
     // Lifecycle
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.5.1"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1"
-    implementation "androidx.activity:activity-ktx:1.6.1"
+//    implementation "androidx.activity:activity-ktx:1.6.1"
     implementation "androidx.fragment:fragment-ktx:1.5.4"
     implementation "androidx.lifecycle:lifecycle-service:2.5.1"
 
@@ -136,7 +136,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-intents:3.4.0'
 
     // Hilt Testing
-    kaptTest 'com.google.dagger:hilt-android-compiler:2.41'
+    kaptTest 'com.google.dagger:hilt-android-compiler:2.44'
     testImplementation 'com.google.dagger:hilt-android-testing:2.41'
 
     kaptAndroidTest 'com.google.dagger:hilt-android-compiler:2.41'
